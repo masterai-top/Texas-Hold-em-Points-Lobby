@@ -1,47 +1,82 @@
 [简体中文](README.md) | [繁體中文](README.zh-TW.md) | [English](README.en.md)
 
-# Texas Hold'em Points Lobby Source Code - C++ Server and Tournament System
+# Texas Hold'em Points Lobby Source Code - C++/Tars Tournament Server
 
-[![C++](https://img.shields.io/badge/server-C%2B%2B-00599c?logo=cplusplus)](./MatchServer.cpp)
-[![Tars](https://img.shields.io/badge/protocol-Tars-1f6feb)](./MatchProto.tars)
-[![License](https://img.shields.io/badge/license-see%20License.md-blue)](./License.md)
+[![C++](https://img.shields.io/badge/server-C%2B%2B-00599c?logo=cplusplus)](MatchServer.cpp)
+[![Tars](https://img.shields.io/badge/protocol-Tars-1f6feb)](MatchProto.tars)
+[![Pages](https://img.shields.io/badge/demo-GitHub%20Pages-176b52)](https://masterai-top.github.io/Texas-Hold-em-Points-Lobby/en/)
+[![License](https://img.shields.io/badge/license-see%20License.md-blue)](License.md)
 
-Source code for a Texas Hold'em points lobby, coin lobby, and multiplayer tournament system. The public repository primarily contains a **C++ / Tars match server**, including matchmaking, room messaging, game lifecycle handling, timers, order interfaces, reward configuration, and Classic Hold'em and Short Deck configuration.
+This repository covers a **Texas Hold'em points lobby, coin lobby, and multiplayer tournament server**. Its public implementation is centered on C++ and Tars, with match information, player registration and state reporting, room messages, game lifecycle handlers, blind levels, rewards, order interfaces, Classic Hold'em, 6+ Short Deck, and insurance-related configuration.
 
-> The repository contains Unity `Packages/` and `ProjectSettings/`, but not a complete Unity `Assets/` directory. The public files alone therefore do not constitute a buildable full client. See [PUBLIC-SCOPE.md](PUBLIC-SCOPE.md) and [License.md](License.md) for scope and licensing.
+Teams evaluating poker lobby source code, SNG/MTT services, or a C++ multiplayer game server can use the repository to inspect concrete protocols, handlers, configurations, and product screens before planning integration work.
 
-## Use Cases
+> The repository includes Unity `Packages/` and `ProjectSettings/`,  Unity `Assets/` . Review [PUBLIC-SCOPE.md](PUBLIC-SCOPE.md), the [build guide](docs/build-guide.md), dependencies, and licensing first.
 
-- Server-side reference for poker points lobbies, coin lobbies, and clubs
-- SNG and MTT matchmaking and room-flow implementation
-- Classic Hold'em, 6+ Short Deck, insurance, and reward configuration
-- C++ multiplayer server and Tars interface design
+## Product Screens
 
-## Public Modules
-
-| Area | Repository content |
+| Points lobby | SNG tournament |
 | --- | --- |
-| Matchmaking | `MatchServer.*`, `MatchServantImp.*`, `MatchServant.tars` |
-| Protocols | `MatchProto.tars`, `OrderServant.tars`, room and client message headers |
-| Game flow | Start, settlement, leave-table, timer, and dealing handlers |
-| Configuration | Classic Hold'em, Short Deck, club, blind, and insurance structures |
-| Rewards and orders | Tournament reward configuration and order service interfaces |
+| ![Texas Hold'em points lobby source code game-mode screen](Screenshots/大厅01.png) | ![Texas Hold'em SNG tournament interface](Screenshots/sng05.jpg) |
+| Multi-table tournament | Nine-player table |
+| ![Texas Hold'em MTT multi-table tournament interface](Screenshots/多座竞标赛1.jpg) | ![Texas Hold'em nine-player multiplayer table](docs/Assets/screenshots/06-9.jpg) |
 
-## Screenshots
+Explore the illustrated [English product page](https://masterai-top.github.io/Texas-Hold-em-Points-Lobby/en/) or switch to [Simplified Chinese](https://masterai-top.github.io/Texas-Hold-em-Points-Lobby/zh-cn/) and [Traditional Chinese](https://masterai-top.github.io/Texas-Hold-em-Points-Lobby/zh-tw/).
 
-| Points lobby | SNG tournament | Multi-table tournament |
+## Repository-backed Components
+
+| Area | Primary files | Public implementation |
 | --- | --- | --- |
-| ![Texas Hold'em points lobby](Screenshots/大厅01.png) | ![Texas Hold'em SNG tournament](Screenshots/sng05.jpg) | ![Texas Hold'em multi-table tournament](Screenshots/多座竞标赛1.jpg) |
+| Match service | `MatchServer.*`, `MatchServantImp.*` | Service startup, configuration reload, match cleanup, and request handling |
+| Tars contracts | `MatchProto.tars`, `MatchServant.tars` | Match, player, registration, quit, reward, and state structures |
+| Game flow | `Processor.*`, `gamebegin.h`, `gameend.h` | Start, deal, settlement, leave-table, and room-message handling |
+| Timers | `TimerThread.*`, `begintimer.*` | Match-start checks and timing logic |
+| Order service | `OrderServant.tars`, `OrderServer.*` | Order contracts and service entry points |
+| Game configuration | `config/gameconfig.*` | Blinds, Classic Hold'em, Short Deck, and insurance odds |
+| Tournament rewards | `match_reward_config_*` | Reward query and update handlers |
 
-Read the [English project page](https://masterai-top.github.io/Texas-Hold-em-Points-Lobby/en/) for the illustrated overview.
+## Evaluation Use Cases
 
-## Documentation and Contact
+- Architecture review for a points lobby or coin lobby server
+- SNG and MTT registration, match state, ranking, and reward workflows
+- Classic Hold'em, 6+ Short Deck, blind, and insurance configuration
+- C++ multiplayer services, Tars IDL, and room-message design
+- Technical validation before connecting proprietary account, payment, or operations systems
 
-- [Public scope](PUBLIC-SCOPE.md)
+## Repository Map
+
+```text
+MatchServer.*             Match service entry point
+MatchServantImp.*         Tars request implementation
+MatchProto.tars           Match, registration, reward, and ranking contracts
+Processor.*               Game and message processing
+config/                   Game and service configuration
+Screenshots/              README product screens
+docs/                     GitHub Pages and technical documentation
+Packages/                 Unity package configuration
+ProjectSettings/          Unity project settings
+```
+
+## Suggested Review Process
+
+1. Read [PUBLIC-SCOPE.md](PUBLIC-SCOPE.md) and [License.md](License.md).
+2. Confirm Makefile, Tars, Linux, GCC/G++, and external dependency versions.
+3. Start with protocol structures, service initialization, and configuration loading.
+4. Validate registration, state changes, timers, rewards, and failure recovery in an isolated environment.
+5. Do not use the project in production until required client assets and business dependencies are supplied and tested.
+
+## Documentation and Related Projects
+
 - [Tournament server architecture](docs/server-architecture.md)
 - [Matchmaking and game flow](docs/match-game-flow.md)
 - [Tars protocols and messages](docs/tars-message-guide.md)
-- Telegram: `@xuzongbin001`
-- Email: `masterai918@gmail.com`
+- [Build and Unity completeness check](docs/build-guide.md)
+- [Complete Texas Hold'em solution](https://github.com/masterai-top/TexasHoldem-Poker-Complete-Solution)
+- [Texas Hold'em club source](https://github.com/masterai-top/TexasHoldem-Club-Source)
+- [CFR poker AI source code](https://github.com/masterai-top/cfr-poker-ai-masterai)
 
-Comply with all applicable laws and platform rules. This repository does not encourage or support unlawful gambling.
+## Contact and Responsible Use
+
+Telegram: `@xuzongbin001` · Email: `masterai918@gmail.com`
+
+Use this repository only for lawful software development, research, and technical evaluation. Follow applicable law, platform rules, privacy requirements, and protections for minors.
