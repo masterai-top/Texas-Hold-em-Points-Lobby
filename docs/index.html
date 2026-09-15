@@ -12,8 +12,8 @@
   <link rel="alternate" hreflang="zh-Hant" href="https://masterai-top.github.io/Texas-Hold-em-Points-Lobby/zh-tw/">
   <link rel="alternate" hreflang="en" href="https://masterai-top.github.io/Texas-Hold-em-Points-Lobby/en/">
   <link rel="alternate" hreflang="x-default" href="https://masterai-top.github.io/Texas-Hold-em-Points-Lobby/">
-  <meta property="og:title" content="Texas Hold'em Points Lobby Source Code">
-  <meta property="og:description" content="德州扑克金币大厅与积分房源码，支持金币大厅、积分房、俱乐部、私人房间、MTT/SNG 锦标赛、排行榜、商城充值和多语言版本。">
+  <meta property="og:title" content="德州扑克积分大厅源码 - 金币大厅与赛事服务端">
+  <meta property="og:description" content="德州扑克积分大厅、金币大厅、积分房、俱乐部房间及 C++/Tars 比赛服务端源码。">
   <meta property="og:image" content="https://masterai-top.github.io/Texas-Hold-em-Points-Lobby/Assets/screenshots/dating.jpg">
   <style>
     :root {
@@ -22,10 +22,14 @@
     }
     * { box-sizing:border-box; }
     body { margin:0; font-family:Arial, Helvetica, sans-serif; background:var(--bg); color:var(--text); }
-    header { padding:66px 24px; background:linear-gradient(135deg,#020617,#92400e); color:#fff; }
+    header { padding:32px 24px 66px; background:#17201d; color:#fff; }
     .wrap { max-width:1120px; margin:0 auto; }
-    nav { margin-bottom:30px; }
-    nav a { color:#fde68a; margin-right:18px; text-decoration:none; font-weight:700; }
+    nav { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:44px; }
+    .brand { color:#fff; text-decoration:none; font-weight:800; }
+    .nav-links,.language-switch { display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
+    .nav-links a { color:#e5e7eb; text-decoration:none; font-weight:700; }
+    .language-switch a { min-height:40px; display:inline-flex; align-items:center; border:1px solid #6b756f; border-radius:5px; padding:7px 11px; color:#fff; text-decoration:none; font-weight:700; }
+    .language-switch a:hover,.language-switch .active { background:#fff; color:#17201d; border-color:#fff; }
     h1 { font-size:44px; line-height:1.12; margin:18px 0 14px; }
     header p { max-width:920px; color:#fffbeb; font-size:18px; line-height:1.75; }
     main { max-width:1120px; margin:0 auto; padding:38px 22px 72px; }
@@ -42,22 +46,23 @@
     .screenshot-grid figure { margin:0; background:#fff; border:1px solid var(--line); border-radius:18px; overflow:hidden; box-shadow:0 16px 40px rgba(15,23,42,.10); }
     .screenshot-grid img { width:100%; height:auto; display:block; background:#eef2f7; }
     .screenshot-grid figcaption { padding:13px 15px; color:#475569; font-size:14px; border-top:1px solid #eef2f7; }
+    .language-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
+    .language-grid a { display:flex; min-height:130px; flex-direction:column; justify-content:center; border:1px solid var(--line); border-top:4px solid var(--gold); border-radius:8px; padding:22px; background:#fff; text-decoration:none; }
+    .language-grid strong { color:var(--text); font-size:20px; }
+    .language-grid span { margin-top:5px; color:var(--muted); }
+    .scope-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px 28px; padding-left:20px; }
     code { background:#f1f5f9; padding:2px 6px; border-radius:6px; color:#0f172a; }
     footer { padding:30px; text-align:center; color:var(--muted); }
+    @media(max-width:820px){nav{align-items:flex-start;flex-direction:column}.language-grid,.scope-list{grid-template-columns:1fr}.language-switch{width:100%}}
   </style>
 </head>
 <body>
   <header>
     <div class="wrap">
-      <nav>
-        <a href="zh-cn/index.html">简体中文</a>
-        <a href="zh-tw/index.html">繁體中文</a>
-        <a href="en/index.html">English</a>
-        <a href="index.html">Home</a>
-        <a href="#features">Features</a>
-        <a href="#architecture">Architecture</a>
-        <a href="https://github.com/masterai-top/Texas-Hold-em-Points-Lobby/blob/main/docs/build-guide.md">Deployment</a>
-        <a href="https://github.com/masterai-top/Texas-Hold-em-Points-Lobby">GitHub</a>
+      <nav aria-label="主导航">
+        <a class="brand" href="index.html">MasterAI Points Lobby</a>
+        <div class="nav-links"><a href="#features">产品能力</a><a href="#screenshots">真实界面</a><a href="#architecture">源码范围</a><a href="https://github.com/masterai-top/Texas-Hold-em-Points-Lobby">GitHub</a></div>
+        <div class="language-switch" aria-label="语言选择"><a class="active" href="zh-cn/index.html">简体中文</a><a href="zh-tw/index.html">繁體中文</a><a href="en/index.html">English</a></div>
       </nav>
       <h1>德州扑克积分大厅源码：金币大厅、积分房与赛事服务端</h1>
       <p>德州扑克积分大厅源码，聚焦金币大厅、积分房、俱乐部房间、SNG/MTT 流程，以及可核查的 C++/Tars 匹配和牌局服务端。</p>
@@ -65,6 +70,7 @@
         <span class="badge">德州扑克源码</span><span class="badge">金币大厅</span><span class="badge">积分房</span>
         <span class="badge">Poker Lobby</span><span class="badge">SNG / MTT</span><span class="badge">Unity3D + C++</span>
       </div>
+      <a class="btn" href="#screenshots">查看产品界面</a><a class="btn secondary" href="https://github.com/masterai-top/Texas-Hold-em-Points-Lobby">查看 GitHub 源码</a>
     </div>
   </header>
   <main>
@@ -78,7 +84,7 @@
     <section class="grid" id="features">
       <div class="card"><h3>Coin Lobby</h3><p>金币桌、积分房、房间筛选、在线人数、排行榜和大厅推荐位。</p></div>
       <div class="card"><h3>Club & Private Rooms</h3><p>俱乐部成员、私人房、密码房、盲注设置和好友邀请。</p></div>
-      <div class="card"><h3>Tournaments & Operation</h3><p>MTT/SNG 赛事、商城、充值、订单记录、排行榜和后台运营扩展。</p></div>
+      <div class="card"><h3>SNG / MTT 赛事流程</h3><p>比赛匹配、房间消息、奖励配置、订单接口和可扩展的多人赛事服务结构。</p></div>
     </section>
     <section class="card" id="screenshots">
       <h2>Product Screenshots / 产品截图</h2>
@@ -129,9 +135,15 @@
         </figure>
       </div>
     </section>
-    <section class="card">
-      <h2>SEO Keywords / 搜索关键词</h2>
-      <p>Texas Hold'em poker source code, Texas Hold'em Points Lobby, poker lobby system, poker club software, Unity3D poker game, C++ poker server, 德州扑克源码、德州源码、德州扑克金币大厅源码、德州积分房源码、德州俱乐部源码、德州扑克赛事系统。</p>
+    <section class="card" id="architecture">
+      <h2>公开源码范围与技术入口</h2>
+      <p>本仓库的核心价值是可核查的 C++/Tars 服务端结构，而不是仅靠界面截图描述产品。部署和二次开发前应以实际文件、依赖和可复现测试为准。</p>
+      <ul class="scope-list"><li><code>MatchServer.*</code>：比赛服务入口</li><li><code>MatchServantImp.*</code>：匹配业务实现</li><li><code>MatchProto.tars</code>：请求与消息协议</li><li><code>Processor.*</code>：牌局流程处理</li><li><code>OrderServant.tars</code>：订单服务接口</li><li><code>config/gameconfig.*</code>：玩法与房间参数</li></ul>
+      <a class="btn" href="https://github.com/masterai-top/Texas-Hold-em-Points-Lobby/blob/main/docs/server-architecture.md">查看服务端架构</a>
+    </section>
+    <section class="card" aria-labelledby="language-title">
+      <h2 id="language-title">选择语言查看完整图文介绍</h2>
+      <div class="language-grid"><a href="zh-cn/index.html"><strong>简体中文</strong><span>积分大厅、金币房与 C++/Tars 服务端</span></a><a href="zh-tw/index.html"><strong>繁體中文</strong><span>積分大廳、金幣房與賽事伺服器</span></a><a href="en/index.html"><strong>English</strong><span>Texas Hold'em points lobby source code</span></a></div>
     </section>
   </main>
   <footer>© 2026 masterai-top/Texas-Hold-em-Points-Lobby. Use only within lawful regions and lawful business scopes.</footer>
